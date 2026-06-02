@@ -113,12 +113,16 @@ if uploaded_file:
     total_no_submit = filtered[
         'Jumlah No Submit'
     ].sum()
+    
+    total_task = filtered[
+        'Task'
+    ].nunique()
 
     total_activity = filtered[
         'Activity'
     ].nunique()
 
-    col1,col2,col3 = st.columns(3)
+    col1,col2,col3,col4 = st.columns(4)
 
     col1.metric(
         "Total Submit",
