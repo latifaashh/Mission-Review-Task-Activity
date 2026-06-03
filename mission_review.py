@@ -387,73 +387,66 @@ if uploaded_file:
     # ==================================
     # TABEL 2
     # ==================================
-    # ==================================
-# TABEL 2
-# ==================================
-score_summary = (
-    filtered_df
-    .groupby(
-        ['Cycle', 'Activity']
-    )['Score Answer']
-    .agg(
-        Total_Benar=lambda x:
+    score_summary = (
+        filtered_df
+        .groupby(
+            ['Cycle', 'Activity']
+        )['Score Answer']
+        .agg(
+            Total_Benar=lambda x:
             (x == 10).sum(),
 
-        Total_Salah=lambda x:
+            Total_Salah=lambda x:
             (x == 0).sum()
+        )
+        .reset_index()
     )
-    .reset_index()
-)
 
-# Tambah % Score
-
-score_summary['% Score'] = (
-    score_summary['Total_Benar']
-    /
-    (
+    # Tambah % Score
+    score_summary['% Score'] = (
         score_summary['Total_Benar']
-        +
-        score_summary['Total_Salah']
+        /
+        (
+            score_summary['Total_Benar']
+            +
+            score_summary['Total_Salah']
+        )
+        * 100
+    ).fillna(0).round(2)
+    
+    score_summary['% Score'] = (
+        score_summary['% Score']
+        .astype(str)
+        + '%'
     )
-    * 100
-).fillna(0).round(2)
 
-score_summary['% Score'] = (
-    score_summary['% Score']
-    .astype(str)
-    + '%'
-)
+    # Rename kolom
+    score_summary = score_summary.rename(
+        columns={
+            'Total_Benar':
+                'Total Score Benar (10)',
 
-# Rename kolom
+            'Total_Salah':
+                'Total Score Salah (0)'
+        }
+    )
 
-score_summary = score_summary.rename(
-    columns={
-        'Total_Benar':
-            'Total Score Benar (10)',
+    # Sorting
+    score_summary = score_summary.sort_values(
+        by='Total Score Salah (0)',
+        ascending=False
+    )
 
-        'Total_Salah':
-            'Total Score Salah (0)'
-    }
-)
-
-# Sorting
-
-score_summary = score_summary.sort_values(
-    by='Total Score Salah (0)',
-    ascending=False
-)
-
-# Tampilkan tabel
-
-st.subheader(
-    "🏆 Hasil Score Activity"
-)
-
-st.dataframe(
-    score_summary,
-    hide_index=True,
-    use_container_width=True
-)
+    # Tampilkan tabel
+    st.subheader(
+        "🏆 Hasil Score Activity"
+    )
+    
+    st.dataframe(
+        score_summary,
+        hide_index=True,
+        use_container_width=True
+    )
 
     # ==================================
     # DOWNLOAD EXCEL
