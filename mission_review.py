@@ -59,7 +59,7 @@ if uploaded_file:
 
     summary = (
         df.groupby(
-            ['Cycle','Task','Activity','Submit']
+            ['Cycle','Activity','Submit']
         )
         .size()
         .unstack(fill_value=0)
@@ -113,16 +113,12 @@ if uploaded_file:
     total_no_submit = filtered[
         'Jumlah No Submit'
     ].sum()
-    
-    total_task = filtered[
-        'Task'
-    ].nunique()
 
     total_activity = filtered[
         'Activity'
     ].nunique()
 
-    col1,col2,col3,col4 = st.columns(4)
+    col1,col2,col3 = st.columns(3)
 
     col1.metric(
         "Total Submit",
@@ -135,11 +131,6 @@ if uploaded_file:
     )
 
     col3.metric(
-        "Total Task",
-        f"{total_task:,}"
-    )
-
-    col4.metric(
         "Total Activity",
         f"{total_activity:,}"
     )
