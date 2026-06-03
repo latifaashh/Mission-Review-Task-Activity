@@ -7,7 +7,7 @@ from io import BytesIO
 # ==================================
 
 st.set_page_config(
-    page_title="Mission Review",
+    page_title="Mission Review Dashboard",
     layout="wide"
 )
 
@@ -77,68 +77,65 @@ if uploaded_file:
     # ==================================
 
     if 'Completion Date' in df.columns:
-        
-# ==================================
-# KONVERSI BULAN INDONESIA
-# ==================================
 
-bulan_map = {
-    'Jan': 'January',
-    'Feb': 'February',
-    'Mar': 'March',
-    'Apr': 'April',
-    'Mei': 'May',
-    'Jun': 'June',
-    'Jul': 'July',
-    'Agu': 'August',
-    'Sep': 'September',
-    'Okt': 'October',
-    'Nov': 'November',
-    'Des': 'December'
-}
+        df['Completion Date'] = (
+            df['Completion Date']
+            .astype(str)
+            .str.strip()
+        )
 
-df['Completion Date'] = (
-    df['Completion Date']
-    .astype(str)
-)
+        bulan_map = {
+            'Jan': 'January',
+            'Feb': 'February',
+            'Mar': 'March',
+            'Apr': 'April',
+            'Mei': 'May',
+            'Jun': 'June',
+            'Jul': 'July',
+            'Agu': 'August',
+            'Sep': 'September',
+            'Okt': 'October',
+            'Nov': 'November',
+            'Des': 'December'
+        }
 
-for indo, eng in bulan_map.items():
-    df['Completion Date'] = (
-        df['Completion Date']
-        .str.replace(indo, eng, regex=False)
-    )
+        for indo, eng in bulan_map.items():
 
-df['Completion Date'] = pd.to_datetime(
-    df['Completion Date'],
-    dayfirst=True,
-    errors='coerce'
-)
+            df['Completion Date'] = (
+                df['Completion Date']
+                .str.replace(
+                    indo,
+                    eng,
+                    regex=False
+                )
+            )
 
-df['Bulan'] = (
-    df['Completion Date']
-    .dt.month_name()
-)
+        df['Completion Date'] = pd.to_datetime(
+            df['Completion Date'],
+            dayfirst=True,
+            errors='coerce'
+        )
 
-bulan_indonesia = {
-    'January': 'Januari',
-    'February': 'Februari',
-    'March': 'Maret',
-    'April': 'April',
-    'May': 'Mei',
-    'June': 'Juni',
-    'July': 'Juli',
-    'August': 'Agustus',
-    'September': 'September',
-    'October': 'Oktober',
-    'November': 'November',
-    'December': 'Desember'
-}
+        bulan_indonesia = {
+            'January': 'Januari',
+            'February': 'Februari',
+            'March': 'Maret',
+            'April': 'April',
+            'May': 'Mei',
+            'June': 'Juni',
+            'July': 'Juli',
+            'August': 'Agustus',
+            'September': 'September',
+            'October': 'Oktober',
+            'November': 'November',
+            'December': 'Desember'
+        }
 
-df['Bulan'] = (
-    df['Completion Date']
-    .dt.month_name()
-    .map(bulan_indonesia)
-)
+        df['Bulan'] = (
+            df['Completion Date']
+            .dt.month_name()
+            .map(bulan_indonesia)
+        )
 
     else:
 
@@ -150,26 +147,30 @@ df['Bulan'] = (
 
     st.sidebar.header("🔍 Filter")
 
-    # Bulan
-
-    month_order = [
-        'January', 'February', 'March',
-        'April', 'May', 'June',
-        'July', 'August', 'September',
-        'October', 'November', 'December'
+    urutan_bulan = [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
     ]
 
     available_months = [
-        m for m in month_order
-        if m in df['Bulan'].unique()
+        b for b in urutan_bulan
+        if b in df['Bulan'].dropna().unique()
     ]
 
     selected_month = st.sidebar.selectbox(
         "Bulan",
         ['All'] + available_months
     )
-
-    # Cycle
 
     cycle_list = (
         ['All']
@@ -185,8 +186,6 @@ df['Bulan'] = (
         "Cycle",
         cycle_list
     )
-
-    # Name
 
     if 'Name' in df.columns:
 
@@ -205,8 +204,6 @@ df['Bulan'] = (
 
         selected_name = 'All'
 
-    # Posisi
-
     if 'Posisi' in df.columns:
 
         selected_posisi = st.sidebar.selectbox(
@@ -224,8 +221,6 @@ df['Bulan'] = (
 
         selected_posisi = 'All'
 
-    # Branch
-
     if 'Branch' in df.columns:
 
         selected_branch = st.sidebar.selectbox(
@@ -242,8 +237,6 @@ df['Bulan'] = (
     else:
 
         selected_branch = 'All'
-
-    # Region
 
     if 'Region' in df.columns:
 
@@ -269,49 +262,43 @@ df['Bulan'] = (
     filtered_df = df.copy()
 
     if selected_month != 'All':
-
         filtered_df = filtered_df[
             filtered_df['Bulan']
             == selected_month
         ]
 
     if selected_cycle != 'All':
-
         filtered_df = filtered_df[
             filtered_df['Cycle']
             == selected_cycle
         ]
 
     if selected_name != 'All':
-
         filtered_df = filtered_df[
             filtered_df['Name']
             == selected_name
         ]
 
     if selected_posisi != 'All':
-
         filtered_df = filtered_df[
             filtered_df['Posisi']
             == selected_posisi
         ]
 
     if selected_branch != 'All':
-
         filtered_df = filtered_df[
             filtered_df['Branch']
             == selected_branch
         ]
 
     if selected_region != 'All':
-
         filtered_df = filtered_df[
             filtered_df['Region']
             == selected_region
         ]
 
     # ==================================
-    # KPI CARD
+    # KPI
     # ==================================
 
     total_submit = (
@@ -342,25 +329,10 @@ df['Bulan'] = (
 
     col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric(
-        "Total Submit",
-        f"{total_submit:,}"
-    )
-
-    col2.metric(
-        "Total No Submit",
-        f"{total_no_submit:,}"
-    )
-
-    col3.metric(
-        "Total Task",
-        f"{total_task:,}"
-    )
-
-    col4.metric(
-        "Total Activity",
-        f"{total_activity:,}"
-    )
+    col1.metric("Total Submit", f"{total_submit:,}")
+    col2.metric("Total No Submit", f"{total_no_submit:,}")
+    col3.metric("Total Task", f"{total_task:,}")
+    col4.metric("Total Activity", f"{total_activity:,}")
 
     # ==================================
     # TABEL 1
@@ -368,25 +340,25 @@ df['Bulan'] = (
 
     summary_submit = (
         filtered_df
-        .groupby(
-            ['Cycle', 'Activity']
-        )
+        .groupby(['Cycle', 'Activity'])
         .agg(
             Total_Submit=(
                 'Submit',
-                lambda x:
-                x.astype(str)
-                .str.upper()
-                .eq('YES')
-                .sum()
+                lambda x: (
+                    x.astype(str)
+                    .str.upper()
+                    .eq('YES')
+                    .sum()
+                )
             ),
             Total_No_Submit=(
                 'Submit',
-                lambda x:
-                x.astype(str)
-                .str.upper()
-                .eq('NO')
-                .sum()
+                lambda x: (
+                    x.astype(str)
+                    .str.upper()
+                    .eq('NO')
+                    .sum()
+                )
             )
         )
         .reset_index()
@@ -408,17 +380,15 @@ df['Bulan'] = (
         ascending=False
     )
 
-    st.subheader(
-        "📋 Pengerjaan Mission"
-    )
+    st.subheader("📋 Pengerjaan Mission")
 
     st.dataframe(
-        summary_submit.rename(columns={
-            'Total_Submit':
-                'Total Submit',
-            'Total_No_Submit':
-                'Total No Submit'
-        }),
+        summary_submit.rename(
+            columns={
+                'Total_Submit': 'Total Submit',
+                'Total_No_Submit': 'Total No Submit'
+            }
+        ),
         use_container_width=True
     )
 
@@ -441,12 +411,14 @@ df['Bulan'] = (
         .reset_index()
     )
 
-    score_summary = score_summary.rename(columns={
-        'Total_Benar':
-            'Total Score Benar (10)',
-        'Total_Salah':
-            'Total Score Salah (0)'
-    })
+    score_summary = score_summary.rename(
+        columns={
+            'Total_Benar':
+                'Total Score Benar (10)',
+            'Total_Salah':
+                'Total Score Salah (0)'
+        }
+    )
 
     score_summary = score_summary.sort_values(
         by='Total Score Salah (0)',
