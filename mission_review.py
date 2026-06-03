@@ -80,6 +80,7 @@ if uploaded_file:
 
         df['Completion Date'] = pd.to_datetime(
             df['Completion Date'],
+            dayfirst=True,
             errors='coerce'
         )
 
