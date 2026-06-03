@@ -163,7 +163,6 @@ if uploaded_file:
         ranking[
             [
                 'Cycle',
-                'Task',
                 'Activity',
                 'Jumlah No Submit'
             ]
