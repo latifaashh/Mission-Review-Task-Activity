@@ -401,6 +401,21 @@ if uploaded_file:
                 (x == 0).sum()
         )
         .reset_index()
+        score_summary['% Score'] = (
+            score_summary['Total_Benar']
+            /
+            (
+                score_summary['Total_Benar']
+                +
+                score_summary['Total_Salah']
+            )
+            * 100
+        ).fillna(0).round(2)
+        score_summary['% Score'] = (
+            score_summary['% Score']
+            .astype(str)
+            + '%'
+        )
     )
 
     score_summary = score_summary.rename(
