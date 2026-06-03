@@ -101,7 +101,7 @@ if uploaded_file:
     # Bulan
 
     month_order = [
-        'January', 'February, 'March',
+        'January', 'February', 'March',
         'April', 'May', 'June',
         'July', 'August', 'September',
         'October', 'November', 'December'
