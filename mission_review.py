@@ -77,17 +77,68 @@ if uploaded_file:
     # ==================================
 
     if 'Completion Date' in df.columns:
+        
+# ==================================
+# KONVERSI BULAN INDONESIA
+# ==================================
 
-        df['Completion Date'] = pd.to_datetime(
-            df['Completion Date'],
-            dayfirst=True,
-            errors='coerce'
-        )
+bulan_map = {
+    'Jan': 'January',
+    'Feb': 'February',
+    'Mar': 'March',
+    'Apr': 'April',
+    'Mei': 'May',
+    'Jun': 'June',
+    'Jul': 'July',
+    'Agu': 'August',
+    'Sep': 'September',
+    'Okt': 'October',
+    'Nov': 'November',
+    'Des': 'December'
+}
 
-        df['Bulan'] = (
-            df['Completion Date']
-            .dt.strftime('%B')
-        )
+df['Completion Date'] = (
+    df['Completion Date']
+    .astype(str)
+)
+
+for indo, eng in bulan_map.items():
+    df['Completion Date'] = (
+        df['Completion Date']
+        .str.replace(indo, eng, regex=False)
+    )
+
+df['Completion Date'] = pd.to_datetime(
+    df['Completion Date'],
+    dayfirst=True,
+    errors='coerce'
+)
+
+df['Bulan'] = (
+    df['Completion Date']
+    .dt.month_name()
+)
+
+bulan_indonesia = {
+    'January': 'Januari',
+    'February': 'Februari',
+    'March': 'Maret',
+    'April': 'April',
+    'May': 'Mei',
+    'June': 'Juni',
+    'July': 'Juli',
+    'August': 'Agustus',
+    'September': 'September',
+    'October': 'Oktober',
+    'November': 'November',
+    'December': 'Desember'
+}
+
+df['Bulan'] = (
+    df['Completion Date']
+    .dt.month_name()
+    .map(bulan_indonesia)
+)
 
     else:
 
