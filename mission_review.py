@@ -371,13 +371,16 @@ if uploaded_file:
 
     st.subheader("📋 Pengerjaan Mission")
 
+    summary_display = summary_submit.rename(
+        columns={
+            'Total_Submit':'Total Submit',
+            'Total_No_Submit':'Total No Submit'
+        }
+    )
+    
     st.dataframe(
-        summary_submit.rename(
-            columns={
-                'Total_Submit': 'Total Submit',
-                'Total_No_Submit': 'Total No Submit'
-            }
-        ),
+        summary_display,
+        hide_index=True,
         use_container_width=True
     )
 
@@ -420,6 +423,7 @@ if uploaded_file:
 
     st.dataframe(
         score_summary,
+        hide_index=True,
         use_container_width=True
     )
 
