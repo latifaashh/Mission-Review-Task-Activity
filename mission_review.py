@@ -101,10 +101,10 @@ if uploaded_file:
     # Bulan
 
     month_order = [
-        'January', 'February', 'March',
-        'April', 'May', 'June',
-        'July', 'August', 'September',
-        'October', 'November', 'December'
+        'Januari', 'Februari', 'Maret',
+        'April', 'Mei', 'Juni',
+        'Juli', 'Augustus', 'September',
+        'Oktober', 'November', 'Desember'
     ]
 
     available_months = [
