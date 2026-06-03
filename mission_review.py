@@ -45,6 +45,7 @@ if uploaded_file:
             'Task',
             'Activity',
             'Completion Date'
+            'Submit'
         ]
         if col in df.columns
     ]
