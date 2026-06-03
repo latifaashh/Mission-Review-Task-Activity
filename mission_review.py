@@ -36,28 +36,6 @@ if uploaded_file:
     st.success("File berhasil diupload")
 
     # ==================================
-    # REMOVE DUPLICATE
-    # ==================================
-
-    duplicate_cols = [
-        col for col in [
-            'Name',
-            'Task',
-            'Activity',
-            'Completion Date'
-            'Submit'
-        ]
-        if col in df.columns
-    ]
-
-    if duplicate_cols:
-        df = df.drop_duplicates(
-            subset=duplicate_cols
-        )
-    else:
-        df = df.drop_duplicates()
-
-    # ==================================
     # DATA CLEANING
     # ==================================
 
