@@ -184,7 +184,11 @@ if uploaded_file:
 
     selected_cycle = st.sidebar.selectbox(
         "Cycle",
-        cycle_list
+        [
+            "All",
+            "Daily",
+            "Weekly & Monthly"
+        ]
     )
 
     if 'Name' in df.columns:
@@ -267,11 +271,16 @@ if uploaded_file:
             == selected_month
         ]
 
-    if selected_cycle != 'All':
+    if selected_cycle == "Daily":
         filtered_df = filtered_df[
             filtered_df['Cycle']
-            == selected_cycle
+            == 'Daily'
         ]
+    elif selected_cycle == "Weekly & Monthly":
+        filtered_df = filtered_df[
+            filtered_df['Cycle']
+            .isin(['Weekly', 'Monthly'])
+    ]
 
     if selected_name != 'All':
         filtered_df = filtered_df[
