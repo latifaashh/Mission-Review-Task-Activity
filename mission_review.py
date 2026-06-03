@@ -363,9 +363,10 @@ if uploaded_file:
         * 100
     ).fillna(0).round(2)
 
-    summary_submit = summary_submit.sort_values(
-        by='Total_No_Submit',
-        ascending=False
+    summary_submit['% Submit'] = (
+        summary_submit['% Submit']
+        .astype(str)
+        + '%'
     )
 
     st.subheader("📋 Pengerjaan Mission")
