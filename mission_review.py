@@ -14,26 +14,18 @@ st.set_page_config(
 st.title("📊 Mission Review")
 
 # ==================================
-# UPLOAD FILE
+# GOOGLE SPREADSHEET
 # ==================================
 
-uploaded_file = st.file_uploader(
-    "Upload Excel / CSV",
-    type=["xlsx", "csv"]
-)
+SHEET_ID = "1BT3OaRk09QegMSlYmsHovqPswLJ0Ggcs00mDbyReDcE"
 
-if uploaded_file:
+SHEET_NAME = "Sheet1"
 
-    # ==================================
-    # READ FILE
-    # ==================================
+url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
 
-    if uploaded_file.name.endswith(".xlsx"):
-        df = pd.read_excel(uploaded_file)
-    else:
-        df = pd.read_csv(uploaded_file)
+df = pd.read_csv(url)
 
-    st.success("File berhasil diupload")
+st.success("Data berhasil dimuat dari Google Spreadsheet")
 
     # ==================================
     # DATA CLEANING
@@ -476,10 +468,4 @@ if uploaded_file:
         data=excel_file.getvalue(),
         file_name='mission_review_summary.xlsx',
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-
-else:
-
-    st.info(
-        "Silakan upload file Excel atau CSV."
     )
