@@ -43,429 +43,429 @@ df['Submit'] = (
         errors='coerce'
     ).fillna(0)
 
-    # ==================================
-    # DATE CLEANING
-    # ==================================
+# ==================================
+# DATE CLEANING
+# ==================================
 
-    if 'Completion Date' in df.columns:
+if 'Completion Date' in df.columns:
+
+    df['Completion Date'] = (
+        df['Completion Date']
+        .astype(str)
+        .str.strip()
+    )
+
+    bulan_map = {
+        'Jan': 'January',
+        'Feb': 'February',
+        'Mar': 'March',
+        'Apr': 'April',
+        'Mei': 'May',
+        'Jun': 'June',
+        'Jul': 'July',
+        'Agu': 'August',
+        'Sep': 'September',
+        'Okt': 'October',
+        'Nov': 'November',
+        'Des': 'December'
+    }
+
+    for indo, eng in bulan_map.items():
 
         df['Completion Date'] = (
             df['Completion Date']
-            .astype(str)
-            .str.strip()
-        )
-
-        bulan_map = {
-            'Jan': 'January',
-            'Feb': 'February',
-            'Mar': 'March',
-            'Apr': 'April',
-            'Mei': 'May',
-            'Jun': 'June',
-            'Jul': 'July',
-            'Agu': 'August',
-            'Sep': 'September',
-            'Okt': 'October',
-            'Nov': 'November',
-            'Des': 'December'
-        }
-
-        for indo, eng in bulan_map.items():
-
-            df['Completion Date'] = (
-                df['Completion Date']
-                .str.replace(
-                    indo,
-                    eng,
-                    regex=False
-                )
+            .str.replace(
+                indo,
+                eng,
+                regex=False
             )
-
-        df['Completion Date'] = pd.to_datetime(
-            df['Completion Date'],
-            dayfirst=True,
-            errors='coerce'
         )
 
-        bulan_indonesia = {
-            'January': 'Januari',
-            'February': 'Februari',
-            'March': 'Maret',
-            'April': 'April',
-            'May': 'Mei',
-            'June': 'Juni',
-            'July': 'Juli',
-            'August': 'Agustus',
-            'September': 'September',
-            'October': 'Oktober',
-            'November': 'November',
-            'December': 'Desember'
-        }
-
-        df['Bulan'] = (
-            df['Completion Date']
-            .dt.month_name()
-            .map(bulan_indonesia)
-        )
-
-    else:
-
-        df['Bulan'] = 'Unknown'
-
-    # ==================================
-    # SIDEBAR FILTER
-    # ==================================
-
-    st.sidebar.header("🔍 Filter")
-
-    urutan_bulan = [
-        'Januari',
-        'Februari',
-        'Maret',
-        'April',
-        'Mei',
-        'Juni',
-        'Juli',
-        'Agustus',
-        'September',
-        'Oktober',
-        'November',
-        'Desember'
-    ]
-
-    available_months = [
-        b for b in urutan_bulan
-        if b in df['Bulan'].dropna().unique()
-    ]
-
-    selected_month = st.sidebar.selectbox(
-        "Bulan",
-        ['All'] + available_months
+    df['Completion Date'] = pd.to_datetime(
+        df['Completion Date'],
+        dayfirst=True,
+        errors='coerce'
     )
 
-    cycle_list = (
+    bulan_indonesia = {
+        'January': 'Januari',
+        'February': 'Februari',
+        'March': 'Maret',
+        'April': 'April',
+        'May': 'Mei',
+        'June': 'Juni',
+        'July': 'Juli',
+        'August': 'Agustus',
+        'September': 'September',
+        'October': 'Oktober',
+        'November': 'November',
+        'December': 'Desember'
+    }
+
+    df['Bulan'] = (
+        df['Completion Date']
+        .dt.month_name()
+        .map(bulan_indonesia)
+    )
+
+else:
+
+    df['Bulan'] = 'Unknown'
+
+# ==================================
+# SIDEBAR FILTER
+# ==================================
+
+st.sidebar.header("🔍 Filter")
+
+urutan_bulan = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+]
+
+available_months = [
+    b for b in urutan_bulan
+    if b in df['Bulan'].dropna().unique()
+]
+
+selected_month = st.sidebar.selectbox(
+    "Bulan",
+    ['All'] + available_months
+)
+
+cycle_list = (
+    ['All']
+    + sorted(
+        df['Cycle']
+        .dropna()
+        .unique()
+        .tolist()
+    )
+)
+
+selected_cycle = st.sidebar.selectbox(
+    "Cycle",
+    [
+        "All",
+        "Daily",
+        "Weekly & Monthly"
+    ]
+)
+
+if 'Name' in df.columns:
+
+    selected_name = st.sidebar.selectbox(
+        "Nama",
         ['All']
         + sorted(
-            df['Cycle']
+            df['Name']
             .dropna()
             .unique()
             .tolist()
         )
     )
 
-    selected_cycle = st.sidebar.selectbox(
-        "Cycle",
-        [
-            "All",
-            "Daily",
-            "Weekly & Monthly"
-        ]
+else:
+
+    selected_name = 'All'
+
+if 'Posisi' in df.columns:
+
+    selected_posisi = st.sidebar.selectbox(
+        "Posisi",
+        ['All']
+        + sorted(
+            df['Posisi']
+            .dropna()
+            .unique()
+            .tolist()
+        )
     )
 
-    if 'Name' in df.columns:
+else:
 
-        selected_name = st.sidebar.selectbox(
-            "Nama",
-            ['All']
-            + sorted(
-                df['Name']
-                .dropna()
-                .unique()
-                .tolist()
-            )
+    selected_posisi = 'All'
+
+if 'Branch' in df.columns:
+
+    selected_branch = st.sidebar.selectbox(
+        "Branch",
+        ['All']
+        + sorted(
+            df['Branch']
+            .dropna()
+            .unique()
+            .tolist()
         )
+    )
 
-    else:
+else:
 
-        selected_name = 'All'
+    selected_branch = 'All'
 
-    if 'Posisi' in df.columns:
+if 'Region' in df.columns:
 
-        selected_posisi = st.sidebar.selectbox(
-            "Posisi",
-            ['All']
-            + sorted(
-                df['Posisi']
-                .dropna()
-                .unique()
-                .tolist()
-            )
+    selected_region = st.sidebar.selectbox(
+        "Region",
+        ['All']
+        + sorted(
+            df['Region']
+            .dropna()
+            .unique()
+            .tolist()
         )
+    )
 
-    else:
+else:
 
-        selected_posisi = 'All'
+    selected_region = 'All'
 
-    if 'Branch' in df.columns:
+# ==================================
+# APPLY FILTER
+# ==================================
 
-        selected_branch = st.sidebar.selectbox(
-            "Branch",
-            ['All']
-            + sorted(
-                df['Branch']
-                .dropna()
-                .unique()
-                .tolist()
-            )
-        )
+filtered_df = df.copy()
 
-    else:
-
-        selected_branch = 'All'
-
-    if 'Region' in df.columns:
-
-        selected_region = st.sidebar.selectbox(
-            "Region",
-            ['All']
-            + sorted(
-                df['Region']
-                .dropna()
-                .unique()
-                .tolist()
-            )
-        )
-
-    else:
-
-        selected_region = 'All'
-
-    # ==================================
-    # APPLY FILTER
-    # ==================================
-
-    filtered_df = df.copy()
-
-    if selected_month != 'All':
-        filtered_df = filtered_df[
-            filtered_df['Bulan']
-            == selected_month
-        ]
-
-    if selected_cycle == "Daily":
-        filtered_df = filtered_df[
-            filtered_df['Cycle']
-            == 'Daily'
-        ]
-    elif selected_cycle == "Weekly & Monthly":
-        filtered_df = filtered_df[
-            filtered_df['Cycle']
-            .isin(['Weekly', 'Monthly'])
+if selected_month != 'All':
+    filtered_df = filtered_df[
+        filtered_df['Bulan']
+        == selected_month
     ]
 
-    if selected_name != 'All':
-        filtered_df = filtered_df[
-            filtered_df['Name']
-            == selected_name
-        ]
+if selected_cycle == "Daily":
+    filtered_df = filtered_df[
+        filtered_df['Cycle']
+        == 'Daily'
+    ]
+elif selected_cycle == "Weekly & Monthly":
+    filtered_df = filtered_df[
+        filtered_df['Cycle']
+        .isin(['Weekly', 'Monthly'])
+]
 
-    if selected_posisi != 'All':
-        filtered_df = filtered_df[
-            filtered_df['Posisi']
-            == selected_posisi
-        ]
+if selected_name != 'All':
+    filtered_df = filtered_df[
+        filtered_df['Name']
+        == selected_name
+    ]
 
-    if selected_branch != 'All':
-        filtered_df = filtered_df[
-            filtered_df['Branch']
-            == selected_branch
-        ]
+if selected_posisi != 'All':
+    filtered_df = filtered_df[
+        filtered_df['Posisi']
+        == selected_posisi
+    ]
 
-    if selected_region != 'All':
-        filtered_df = filtered_df[
-            filtered_df['Region']
-            == selected_region
-        ]
+if selected_branch != 'All':
+    filtered_df = filtered_df[
+        filtered_df['Branch']
+        == selected_branch
+    ]
 
-    # ==================================
-    # KPI
-    # ==================================
+if selected_region != 'All':
+    filtered_df = filtered_df[
+        filtered_df['Region']
+        == selected_region
+    ]
 
-    total_submit = (
-        filtered_df['Submit']
-        .str.upper()
-        .eq('YES')
-        .sum()
-    )
+# ==================================
+# KPI
+# ==================================
 
-    total_no_submit = (
-        filtered_df['Submit']
-        .str.upper()
-        .eq('NO')
-        .sum()
-    )
+total_submit = (
+    filtered_df['Submit']
+    .str.upper()
+    .eq('YES')
+    .sum()
+)
 
-    total_task = (
-        filtered_df['Task']
-        .nunique()
-        if 'Task' in filtered_df.columns
-        else 0
-    )
+total_no_submit = (
+    filtered_df['Submit']
+    .str.upper()
+    .eq('NO')
+    .sum()
+)
 
-    total_activity = (
-        filtered_df['Activity']
-        .nunique()
-    )
+total_task = (
+    filtered_df['Task']
+    .nunique()
+    if 'Task' in filtered_df.columns
+    else 0
+)
 
-    col1, col2, col3, col4 = st.columns(4)
+total_activity = (
+    filtered_df['Activity']
+    .nunique()
+)
 
-    col1.metric("Total Submit", f"{total_submit:,}")
-    col2.metric("Total No Submit", f"{total_no_submit:,}")
-    col3.metric("Total Task", f"{total_task:,}")
-    col4.metric("Total Activity", f"{total_activity:,}")
+col1, col2, col3, col4 = st.columns(4)
 
-    # ==================================
-    # TABEL 1
-    # ==================================
+col1.metric("Total Submit", f"{total_submit:,}")
+col2.metric("Total No Submit", f"{total_no_submit:,}")
+col3.metric("Total Task", f"{total_task:,}")
+col4.metric("Total Activity", f"{total_activity:,}")
 
-    summary_submit = (
-        filtered_df
-        .groupby(['Cycle', 'Activity'])
-        .agg(
-            Total_Submit=(
-                'Submit',
-                lambda x: (
-                    x.astype(str)
-                    .str.upper()
-                    .eq('YES')
-                    .sum()
-                )
-            ),
-            Total_No_Submit=(
-                'Submit',
-                lambda x: (
-                    x.astype(str)
-                    .str.upper()
-                    .eq('NO')
-                    .sum()
-                )
+# ==================================
+# TABEL 1
+# ==================================
+
+summary_submit = (
+    filtered_df
+    .groupby(['Cycle', 'Activity'])
+    .agg(
+        Total_Submit=(
+            'Submit',
+            lambda x: (
+                x.astype(str)
+                .str.upper()
+                .eq('YES')
+                .sum()
+            )
+        ),
+        Total_No_Submit=(
+            'Submit',
+            lambda x: (
+                x.astype(str)
+                .str.upper()
+                .eq('NO')
+                .sum()
             )
         )
-        .reset_index()
     )
+    .reset_index()
+)
 
-    summary_submit['% Submit'] = (
+summary_submit['% Submit'] = (
+    summary_submit['Total_Submit']
+    /
+    (
         summary_submit['Total_Submit']
-        /
-        (
-            summary_submit['Total_Submit']
-            +
-            summary_submit['Total_No_Submit']
-        )
-        * 100
-    ).fillna(0).round(2)
-
-    summary_submit['% Submit'] = (
-        summary_submit['% Submit']
-        .astype(str)
-        + '%'
+        +
+        summary_submit['Total_No_Submit']
     )
+    * 100
+).fillna(0).round(2)
 
-    st.subheader("📋 Pengerjaan Mission")
+summary_submit['% Submit'] = (
+    summary_submit['% Submit']
+    .astype(str)
+    + '%'
+)
 
-    summary_display = summary_submit.rename(
-        columns={
-            'Total_Submit':'Total Submit',
-            'Total_No_Submit':'Total No Submit'
-        }
-    )
+st.subheader("📋 Pengerjaan Mission")
+
+summary_display = summary_submit.rename(
+    columns={
+        'Total_Submit':'Total Submit',
+        'Total_No_Submit':'Total No Submit'
+    }
+)
     
-    st.dataframe(
-        summary_display,
-        hide_index=True,
-        use_container_width=True
+st.dataframe(
+    summary_display,
+    hide_index=True,
+    use_container_width=True
+)
+
+# ==================================
+# TABEL 2
+# ==================================
+score_summary = (
+    filtered_df
+    .groupby(
+        ['Cycle', 'Activity']
+    )['Score Answer']
+    .agg(
+        Total_Benar=lambda x:
+        (x == 10).sum(),
+
+        Total_Salah=lambda x:
+        (x == 0).sum()
     )
+    .reset_index()
+)
 
-    # ==================================
-    # TABEL 2
-    # ==================================
-    score_summary = (
-        filtered_df
-        .groupby(
-            ['Cycle', 'Activity']
-        )['Score Answer']
-        .agg(
-            Total_Benar=lambda x:
-            (x == 10).sum(),
-
-            Total_Salah=lambda x:
-            (x == 0).sum()
-        )
-        .reset_index()
-    )
-
-    # Tambah % Score
-    score_summary['% Score'] = (
+# Tambah % Score
+score_summary['% Score'] = (
+    score_summary['Total_Benar']
+    /
+    (
         score_summary['Total_Benar']
-        /
-        (
-            score_summary['Total_Benar']
-            +
-            score_summary['Total_Salah']
-        )
-        * 100
-    ).fillna(0).round(2)
+        +
+        score_summary['Total_Salah']
+    )
+    * 100
+).fillna(0).round(2)
     
-    score_summary['% Score'] = (
-        score_summary['% Score']
-        .astype(str)
-        + '%'
-    )
+score_summary['% Score'] = (
+    score_summary['% Score']
+    .astype(str)
+    + '%'
+)
 
-    # Rename kolom
-    score_summary = score_summary.rename(
-        columns={
-            'Total_Benar':
-                'Total Score Benar (10)',
+# Rename kolom
+score_summary = score_summary.rename(
+    columns={
+        'Total_Benar':
+            'Total Score Benar (10)',
 
-            'Total_Salah':
-                'Total Score Salah (0)'
-        }
-    )
+        'Total_Salah':
+            'Total Score Salah (0)'
+    }
+)
 
-    # Sorting
-    score_summary = score_summary.sort_values(
-        by='Total Score Salah (0)',
-        ascending=False
-    )
+# Sorting
+score_summary = score_summary.sort_values(
+    by='Total Score Salah (0)',
+    ascending=False
+)
 
-    # Tampilkan tabel
-    st.subheader(
-        "🏆 Hasil Score Activity"
-    )
+# Tampilkan tabel
+st.subheader(
+    "🏆 Hasil Score Activity"
+)
     
-    st.dataframe(
-        score_summary,
-        hide_index=True,
-        use_container_width=True
+st.dataframe(
+    score_summary,
+    hide_index=True,
+    use_container_width=True
+)
+
+# ==================================
+# DOWNLOAD EXCEL
+# ==================================
+
+excel_file = BytesIO()
+
+with pd.ExcelWriter(
+    excel_file,
+    engine='openpyxl'
+) as writer:
+
+    summary_submit.to_excel(
+        writer,
+        sheet_name='Submit Summary',
+        index=False
     )
 
-    # ==================================
-    # DOWNLOAD EXCEL
-    # ==================================
-
-    excel_file = BytesIO()
-
-    with pd.ExcelWriter(
-        excel_file,
-        engine='openpyxl'
-    ) as writer:
-
-        summary_submit.to_excel(
-            writer,
-            sheet_name='Submit Summary',
-            index=False
-        )
-
-        score_summary.to_excel(
-            writer,
-            sheet_name='Score Summary',
-            index=False
-        )
-
-    st.download_button(
-        label="⬇ Download Summary Excel",
-        data=excel_file.getvalue(),
-        file_name='mission_review_summary.xlsx',
-        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    score_summary.to_excel(
+        writer,
+        sheet_name='Score Summary',
+        index=False
     )
+
+st.download_button(
+    label="⬇ Download Summary Excel",
+    data=excel_file.getvalue(),
+    file_name='mission_review_summary.xlsx',
+    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+)
