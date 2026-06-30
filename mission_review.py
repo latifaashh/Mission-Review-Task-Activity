@@ -38,10 +38,10 @@ df['Submit'] = (
     .str.strip()
 )
 
-    df['Score Answer'] = pd.to_numeric(
-        df['Score Answer'],
-        errors='coerce'
-    ).fillna(0)
+df['Score Answer'] = pd.to_numeric(
+    df['Score Answer'],
+    errors='coerce'
+).fillna(0)
 
 # ==================================
 # DATE CLEANING
@@ -141,16 +141,6 @@ available_months = [
 selected_month = st.sidebar.selectbox(
     "Bulan",
     ['All'] + available_months
-)
-
-cycle_list = (
-    ['All']
-    + sorted(
-        df['Cycle']
-        .dropna()
-        .unique()
-        .tolist()
-    )
 )
 
 selected_cycle = st.sidebar.selectbox(
