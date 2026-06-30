@@ -81,12 +81,12 @@ if 'Completion Date' in df.columns:
     )
 
     bulan_indonesia = {
-        'January': 'Januari 2026',
-        'February': 'Februari 2026',
-        'March': 'Maret 2026',
-        'April': 'April 2026',
-        'May': 'Mei 2026',
-        'December': 'Desember 2026'
+        'January': 'Januari',
+        'February': 'Februari',
+        'March': 'Maret',
+        'April': 'April',
+        'May': 'Mei',
+        'December': 'Desember'
     }
 
     df['Bulan'] = (
