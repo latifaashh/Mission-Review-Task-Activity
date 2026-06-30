@@ -7,11 +7,11 @@ from io import BytesIO
 # ==================================
 
 st.set_page_config(
-    page_title="Mission Review Dashboard",
+    page_title="Mission Review",
     layout="wide"
 )
 
-st.title("📊 Mission Review Dashboard")
+st.title("📊 Mission Review")
 
 # ==================================
 # UPLOAD FILE
