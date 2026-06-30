@@ -373,14 +373,8 @@ score_summary = (
     filtered_df
     .groupby(['Cycle', 'Activity'])['Score Answer']
     .agg(
-        Total_Benar=(
-            'Score Answer',
-            lambda x: (x == 10).sum()
-        ),
-        Total_Salah=(
-            'Score Answer',
-            lambda x: (x == 0).sum()
-        )
+        Total_Benar=lambda x: (x == 10).sum(),
+        Total_Salah=lambda x: (x == 0).sum()
     )
     .reset_index()
 )
