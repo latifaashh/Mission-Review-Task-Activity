@@ -116,6 +116,16 @@ else:
 # SIDEBAR FILTER
 # ==================================
 
+SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1ybaAstHDTPgq4MSO42X_FNaLkbOnro3eaB-rwMROgJ0/edit#gid=0"
+
+st.sidebar.link_button(
+    "📝 Update Data",
+    SPREADSHEET_URL,
+    use_container_width=True
+)
+
+st.sidebar.divider()
+
 st.sidebar.header("🔍 Filter")
 
 urutan_bulan = [
