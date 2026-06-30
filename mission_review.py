@@ -41,7 +41,7 @@ df['Submit'] = (
 df['Score Answer'] = pd.to_numeric(
     df['Score Answer'],
     errors='coerce'
-).fillna(0)
+)
 
 # ==================================
 # DATE CLEANING
@@ -373,12 +373,18 @@ score_summary = (
     filtered_df
     .groupby(['Cycle', 'Activity'])['Score Answer']
     .agg(
-        Total_Benar=lambda x:(x == 10).sum(),
-        Total_Salah=lambda x:(x == 0).sum()
+        Total_Benar=(
+            'Score Answer',
+            lambda x: (x == 10).sum()
+        ),
+        Total_Salah=(
+            'Score Answer',
+            lambda x: (x == 0).sum()
+        )
     )
     .reset_index()
 )
-
+        
 # Tambah % Score
 score_summary['% Score'] = (
     score_summary['Total_Benar']
