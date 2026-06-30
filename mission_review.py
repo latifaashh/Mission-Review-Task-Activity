@@ -61,13 +61,6 @@ if 'Completion Date' in df.columns:
         'Mar': 'March',
         'Apr': 'April',
         'Mei': 'May',
-        'Jun': 'June',
-        'Jul': 'July',
-        'Agu': 'August',
-        'Sep': 'September',
-        'Okt': 'October',
-        'Nov': 'November',
-        'Des': 'December'
     }
 
     for indo, eng in bulan_map.items():
@@ -88,18 +81,12 @@ if 'Completion Date' in df.columns:
     )
 
     bulan_indonesia = {
-        'January': 'Januari',
-        'February': 'Februari',
-        'March': 'Maret',
-        'April': 'April',
-        'May': 'Mei',
-        'June': 'Juni',
-        'July': 'Juli',
-        'August': 'Agustus',
-        'September': 'September',
-        'October': 'Oktober',
-        'November': 'November',
-        'December': 'Desember'
+        'January': 'Januari 2026',
+        'February': 'Februari 2026',
+        'March': 'Maret 2026',
+        'April': 'April 2026',
+        'May': 'Mei 2026',
+        'December': 'Desember 2026'
     }
 
     df['Bulan'] = (
