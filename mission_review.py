@@ -361,7 +361,7 @@ summary_submit['% Submit'] = (
     + '%'
 )
 
-st.subheader("📋ACTIVITY")
+st.subheader("📋Activity")
 
 summary_display = summary_submit.rename(
     columns={
@@ -426,7 +426,7 @@ score_summary = score_summary.sort_values(
 
 # Tampilkan tabel
 st.subheader(
-    "🏆SCORE ANSWER"
+    "🏆Score Answer"
 )
     
 st.dataframe(
