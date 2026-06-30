@@ -27,16 +27,16 @@ df = pd.read_csv(url)
 
 st.success("Data berhasil dimuat dari Google Spreadsheet")
 
-    # ==================================
-    # DATA CLEANING
-    # ==================================
+# ==================================
+# DATA CLEANING
+# ==================================
 
-    df['Submit'] = (
-        df['Submit']
-        .fillna('No')
-        .astype(str)
-        .str.strip()
-    )
+df['Submit'] = (
+    df['Submit']
+    .fillna('No')
+    .astype(str)
+    .str.strip()
+)
 
     df['Score Answer'] = pd.to_numeric(
         df['Score Answer'],
