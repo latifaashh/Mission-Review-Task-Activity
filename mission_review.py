@@ -41,7 +41,7 @@ df['Submit'] = (
 df['Score Answer'] = pd.to_numeric(
     df['Score Answer'],
     errors='coerce'
-).fillna(0)
+)
 
 # ==================================
 # DATE CLEANING
